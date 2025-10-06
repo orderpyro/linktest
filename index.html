@@ -1,114 +1,118 @@
-(function() {
-  var telegramUrl = 'https://t.me/realpyroservice';
-  var btn = document.getElementById('joinBtn');
-  var timer = document.getElementById('timer');
-  var modal = document.getElementById('modal');
-  var openBtn = document.getElementById('openBtn');
-  var cancelBtn = document.getElementById('cancelBtn');
-  var instructions = document.getElementById('instructions');
-  var subtitle = document.getElementById('subtitle');
-
-  var holdTimer = null;
-  var countdown = null;
-  var holdDuration = 2000;
-
-  // Detect URL parameter for TikTok
-  const urlParams = new URLSearchParams(window.location.search);
-  const fromTikTok = urlParams.get('tiktok') === '1';
-
-  // Detect in-app browser
-  var ua = navigator.userAgent || '';
-  var isInApp = /TikTok|Instagram|FBAN|FBAV|Line|LinkedIn/i.test(ua);
-
-  if (fromTikTok) {
-    // Show instructions for TikTok visitors
-    subtitle.textContent = 'Follow the instructions below to open in Safari.';
-    instructions.classList.remove('hidden');
-    btn.textContent = 'Open Instructions';
-
-    // When clicked, scroll to instructions
-    btn.onclick = function() {
-      instructions.scrollIntoView({behavior:'smooth'});
-    };
-    return; // Don't initialize hold-to-join
-  }
-
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Join Telegram</title>
+<meta name="color-scheme" content="dark light">
+<style>
+  :root { --bg:#0b0b0d; --fg:#fff; --muted:#c9c9d3; --accent:#e63946; --card:#141418; --r:14px; }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;display:flex;align-items:center;justify-content:center;padding:22px;background:var(--bg);color:var(--fg);
+       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .card{width:100%;max-width:640px;background:var(--card);border-radius:var(--r);padding:24px;text-align:center;
+        box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  h1{margin:0 0 8px;font-size:1.5rem} p{margin:10px 0;color:var(--muted)}
+  .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .btn,.ghost{display:inline-block;padding:14px 18px;border-radius:12px;font-weight:700;border:none;cursor:pointer;text-decoration:none}
+  .btn{background:var(--accent);color:#fff} .ghost{background:transparent;color:#fff;border:1px solid #2b2b33}
+  .steps{margin-top:16px;text-align:left;background:#0f0f13;border:1px solid #21212a;border-radius:12px;padding:14px;display:none}
+  .steps ol{margin:0;padding-left:18px} .tiny{font-size:.85rem;color:var(--muted);margin-top:8px}
+  .qr{margin-top:16px;display:none} .qr img{width:220px;height:220px;border-radius:12px}
+  .loading { display: none; margin-top: 10px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Join on Telegram</h1>
+    <p>If nothing happens after tapping a button, open this page in your phone’s browser (Safari/Chrome) and try again.</p>
+    <div class="row" role="group" aria-label="Actions">
+      <a id="openApp" class="btn" href="#" rel="noopener" role="button">Open in Telegram</a>
+      <a id="androidIntent" class="ghost" href="#" rel="nofollow noopener" role="button">Open in Telegram (Android)</a>
+      <button id="copyBtn" class="ghost" type="button" aria-describedby="copiedMsg">Copy link</button>
+    </div>
+    <div class="tiny" id="copiedMsg" style="display:none;">Copied ✔ Paste in Safari/Chrome, then tap Join.</div>
+    <div class="loading" id="loadingMsg">Automatically opening in Safari... If it doesn't, tap the button above.</div>
+    <div class="steps" id="inAppSteps" aria-live="polite">
+      <b>You’re in an in-app browser.</b>
+      <ol>
+        <li>Tap the ⋯ or Share icon.</li>
+        <li>Choose “Open in Safari/Chrome”.</li>
+        <li>Return here and tap “Open in Telegram”.</li>
+      </ol>
+    </div>
+    <div class="qr" id="qrWrap" aria-hidden="true">
+      <img id="qrImg" alt="QR code that opens the Telegram link">
+    </div>
+    <p class="tiny"><noscript>JavaScript is off — use the red button above to open Telegram.</noscript></p>
+  </div>
+<script>
+(function(){
+  const TG_URL = "https://t.me/realpyroservice";
+  const TG_USER = "realpyroservice";
+  const TG_IOS = "tg://resolve?domain=" + TG_USER;
+  const TG_ANDROID_INTENT = "intent://resolve?domain="+TG_USER+"#Intent;scheme=tg;package=org.telegram.messenger;end";
+  const ua = navigator.userAgent || navigator.vendor || "";
+  const isIOS = /iPad|iPhone|iPod/i.test(ua);
+  const isAndroid = /Android/i.test(ua);
+  const isInApp = /(TikTok|Instagram|FBAN|FBAV|FB_IAB|Snapchat|Pinterest|LinkedInApp|Line)/i.test(ua);
+  const openApp = document.getElementById('openApp');
+  const androidIntent = document.getElementById('androidIntent');
+  const copyBtn = document.getElementById('copyBtn');
+  const copiedMsg = document.getElementById('copiedMsg');
+  const inAppSteps = document.getElementById('inAppSteps');
+  const qrWrap = document.getElementById('qrWrap');
+  const qrImg = document.getElementById('qrImg');
+  const loadingMsg = document.getElementById('loadingMsg');
+  // Visible hints if we’re inside an in-app browser
   if (isInApp) {
-    subtitle.textContent = 'Follow the instructions below';
-    instructions.classList.remove('hidden');
-    btn.textContent = 'Open Instructions';
-    btn.onclick = function() {
-      instructions.scrollIntoView({behavior:'smooth'});
-    };
-    return;
+    inAppSteps.style.display = 'block';
+    qrWrap.style.display = 'block';
   }
-
-  // Function to start hold
-  function startHold() {
-    btn.classList.add('holding');
-    var remaining = 2;
-    timer.textContent = remaining;
-
-    countdown = setInterval(function() {
-      remaining--;
-      if (remaining > 0) {
-        timer.textContent = remaining;
-      }
-    }, 1000);
-
-    holdTimer = setTimeout(function() {
-      clearInterval(countdown);
-      timer.textContent = '';
-      btn.classList.remove('holding');
-      // Show modal to open Telegram
-      modal.classList.add('show');
-    }, holdDuration);
-  }
-
-  function stopHold() {
-    btn.classList.remove('holding');
-    clearTimeout(holdTimer);
-    clearInterval(countdown);
-    timer.textContent = '';
-  }
-
-  // Event listeners for hold button (touch/mouse)
-  btn.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    startHold();
-  });
-  btn.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    stopHold();
-  });
-  btn.addEventListener('touchcancel', function(e) {
-    e.preventDefault();
-    stopHold();
-  });
-  btn.addEventListener('mousedown', function(e) {
-    e.preventDefault();
-    startHold();
-  });
-  btn.addEventListener('mouseup', function(e) {
-    e.preventDefault();
-    stopHold();
-  });
-  btn.addEventListener('mouseleave', stopHold);
-
-  // Modal actions
-  openBtn.addEventListener('click', function() {
-    modal.classList.remove('show');
-    timer.textContent = '✓';
-    window.location.href = telegramUrl;
-  });
-
-  cancelBtn.addEventListener('click', function() {
-    modal.classList.remove('show');
-  });
-
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      modal.classList.remove('show');
+  // Build QR (uses a public PNG generator; you can self-host if you prefer)
+  qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" + encodeURIComponent(TG_URL);
+  // Copy link
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(TG_URL);
+      copiedMsg.style.display = 'inline';
+      setTimeout(()=> copiedMsg.style.display='none', 2500);
+    } catch {
+      alert("Copy failed. Press and hold to copy:\n" + TG_URL);
     }
   });
+  // Open in Telegram on user gesture - MODIFIED TO FORCE WEB URL ON iOS FOR SAFARI
+  openApp.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Prefer app deep link when possible, but FORCE WEB URL on iOS to open in Safari/browser
+    if (isIOS) {
+      window.location.href = TG_URL;  // Changed from TG_IOS to force browser/Safari
+    } else if (isAndroid) {
+      // Many Android browsers accept the intent: form
+      window.location.href = TG_ANDROID_INTENT;
+      // Fallback to HTTPS after a short delay if app didn’t open
+      setTimeout(() => { if (document.visibilityState !== "hidden") window.location.href = TG_URL; }, 1200);
+    } else {
+      // Desktop or unknown: open the web URL
+      window.location.href = TG_URL;
+    }
+  });
+  // Dedicated Android button (optional)
+  androidIntent.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (isAndroid) {
+      window.location.href = TG_ANDROID_INTENT;
+      setTimeout(() => { if (document.visibilityState !== "hidden") window.location.href = TG_URL; }, 1200);
+    } else {
+      window.location.href = TG_URL;
+    }
+  });
+  // AUTO-CLICK THE BUTTON AFTER SHORT DELAY TO FORCE OPEN
+  setTimeout(() => {
+    loadingMsg.style.display = 'block';
+    openApp.click();  // Simulates user click to trigger the open logic
+  }, 1500);  // 1.5 second delay to allow page load and show message
 })();
+</script>
+</body>
+</html>
