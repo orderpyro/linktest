@@ -184,9 +184,9 @@
 <body>
   <div class="container">
     <h1>Check This Out!</h1>
-    <p class="subtitle" id="subtitle">Hold the button below for 2 seconds</p>
+    <p class="subtitle" id="subtitle">Click the button below</p>
     
-    <button class="btn" id="joinBtn">Hold to Continue</button>
+    <button class="btn" id="joinBtn">Click to Continue</button>
     <div class="timer" id="timer"></div>
   </div>
 
@@ -241,9 +241,11 @@
     
     holdTimer = setTimeout(function(){
       clearInterval(countdown);
-      timer.textContent = '';
+      timer.textContent = 'Opening...';
       btn.classList.remove('holding');
-      modal.classList.add('show');
+      
+      // Skip modal, go directly to AliExpress
+      window.location.href = 'https://www.aliexpress.com';
     }, holdDuration);
   }
   
@@ -289,14 +291,14 @@
   
   btn.addEventListener('mouseleave', stopHold);
   
-  // Modal actions
-  openBtn.addEventListener('click', function(){
+  function openAliExpress(){
     modal.classList.remove('show');
     timer.textContent = 'Opening...';
-    
-    // Just go to AliExpress (stays in current browser)
     window.location.href = 'https://www.aliexpress.com';
-  });
+  }
+  
+  // Modal actions
+  openBtn.addEventListener('click', openAliExpress);
   
   cancelBtn.addEventListener('click', function(){
     modal.classList.remove('show');
