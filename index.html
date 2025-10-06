@@ -1,304 +1,114 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Join Telegram</title>
-<style>
-  body{font-family:system-ui, -apple-system; background:#0b0b0d; color:#fff; margin:0; min-height:100vh;
-       display:flex; align-items:center; justify-content:center; padding:20px}
-  .card{max-width:520px;text-align:center}
-  button, a{display:inline-block;padding:14px 18px;border-radius:12px;border:none;background:#e63946;color:#fff;
-           text-decoration:none;font-weight:700;margin-top:12px;cursor:pointer;transition:transform 0.1s}
-  button:active, a:active{transform:scale(0.95)}
-  .hint{color:#c9c9d3;margin-top:12px;font-size:14px}
-  img.qr{width:200px;height:200px;margin-top:18px;border-radius:12px}
-  .holding{background:#c92a36;animation:pulse 0.5s infinite alternate}
-  @keyframes pulse{to{opacity:0.8}}
-  .timer{font-size:24px;font-weight:bold;color:#e63946;margin-top:8px}
-  
-  /* Safari-style modal */
-  .safari-modal{
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    background:rgba(0,0,0,0.6);
-    display:none;
-    align-items:flex-end;
-    justify-content:center;
-    z-index:1000;
-    animation:fadeIn 0.3s ease;
-  }
-  .safari-modal.show{display:flex}
-  
-  @keyframes fadeIn{from{opacity:0}}
-  @keyframes slideUp{from{transform:translateY(100%)}}
-  
-  .safari-sheet{
-    background:#fff;
-    border-radius:16px 16px 0 0;
-    width:100%;
-    max-width:500px;
-    padding:20px;
-    animation:slideUp 0.3s ease;
-    color:#000;
-  }
-  
-  .safari-header{
-    text-align:center;
-    padding-bottom:16px;
-    border-bottom:1px solid #e5e5e5;
-  }
-  
-  .safari-header h3{
-    margin:0;
-    font-size:18px;
-    font-weight:600;
-  }
-  
-  .safari-header p{
-    margin:8px 0 0 0;
-    font-size:13px;
-    color:#666;
-  }
-  
-  .safari-options{
-    padding:16px 0;
-  }
-  
-  .safari-option{
-    padding:16px;
-    background:#f8f8f8;
-    border-radius:12px;
-    margin-bottom:12px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    cursor:pointer;
-    transition:background 0.2s;
-  }
-  
-  .safari-option:hover{
-    background:#e8e8e8;
-  }
-  
-  .safari-option-icon{
-    width:32px;
-    height:32px;
-    background:#007AFF;
-    border-radius:8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    font-weight:bold;
-    font-size:18px;
-  }
-  
-  .safari-option-text{
-    text-align:left;
-    flex:1;
-  }
-  
-  .safari-option-text strong{
-    display:block;
-    font-size:16px;
-    margin-bottom:2px;
-  }
-  
-  .safari-option-text span{
-    font-size:13px;
-    color:#666;
-  }
-  
-  .safari-cancel{
-    width:100%;
-    padding:16px;
-    background:#f8f8f8;
-    border:none;
-    border-radius:12px;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
-  }
-</style>
-</head>
-<body>
-  <div class="card">
-    <h1>Join our Telegram</h1>
-    <p class="hint">Connecting you to Telegram...</p>
-    <div id="actions">
-      <button id="openTg">Join Telegram</button>
-      <div class="timer" id="timer"></div>
-      <div class="hint" id="appHint"></div>
-    </div>
-    <div id="qrWrap"></div>
-  </div>
-
-  <!-- Safari-style modal -->
-  <div class="safari-modal" id="safariModal">
-    <div class="safari-sheet">
-      <div class="safari-header">
-        <h3>"t.me" wants to open "Telegram"</h3>
-        <p>realpyroservice</p>
-      </div>
-      <div class="safari-options">
-        <div class="safari-option" id="openInTelegram">
-          <div class="safari-option-icon">📱</div>
-          <div class="safari-option-text">
-            <strong>Open in Telegram</strong>
-            <span>Join the channel</span>
-          </div>
-        </div>
-      </div>
-      <button class="safari-cancel" id="cancelBtn">Cancel</button>
-    </div>
-  </div>
-
-<script>
-(function(){
-  var tgApp = "tg://resolve?domain=realpyroservice";
-  var webUrl = "https://t.me/realpyroservice";
-  var openBtn = document.getElementById('openTg');
-  var timerDisplay = document.getElementById('timer');
-  var safariModal = document.getElementById('safariModal');
+(function() {
+  var telegramUrl = 'https://t.me/realpyroservice';
+  var btn = document.getElementById('joinBtn');
+  var timer = document.getElementById('timer');
+  var modal = document.getElementById('modal');
+  var openBtn = document.getElementById('openBtn');
   var cancelBtn = document.getElementById('cancelBtn');
-  var openInTelegram = document.getElementById('openInTelegram');
+  var instructions = document.getElementById('instructions');
+  var subtitle = document.getElementById('subtitle');
 
-  function showSafariPrompt(){
-    safariModal.classList.add('show');
-  }
-
-  function hideSafariPrompt(){
-    safariModal.classList.remove('show');
-  }
-
-  function openTelegram(){
-    hideSafariPrompt();
-    timerDisplay.textContent = 'Opening...';
-    // Just use the web URL - it will automatically open Telegram app if installed
-    window.location.href = webUrl;
-  }
-
-  // Handle Safari modal interactions
-  openInTelegram.addEventListener('click', function(){
-    openTelegram();
-  });
-
-  cancelBtn.addEventListener('click', function(){
-    hideSafariPrompt();
-    timerDisplay.textContent = '';
-  });
-
-  safariModal.addEventListener('click', function(e){
-    if(e.target === safariModal){
-      hideSafariPrompt();
-    }
-  });
-
-  // Button hold functionality
-  var holdTimer;
+  var holdTimer = null;
+  var countdown = null;
   var holdDuration = 2000;
-  var startTime;
-  var countdownInterval;
 
-  function startHold(){
-    openBtn.classList.add('holding');
-    startTime = Date.now();
-    
-    countdownInterval = setInterval(function(){
-      var elapsed = Date.now() - startTime;
-      var remaining = Math.ceil((holdDuration - elapsed) / 1000);
-      if(remaining > 0){
-        timerDisplay.textContent = remaining;
+  // Detect URL parameter for TikTok
+  const urlParams = new URLSearchParams(window.location.search);
+  const fromTikTok = urlParams.get('tiktok') === '1';
+
+  // Detect in-app browser
+  var ua = navigator.userAgent || '';
+  var isInApp = /TikTok|Instagram|FBAN|FBAV|Line|LinkedIn/i.test(ua);
+
+  if (fromTikTok) {
+    // Show instructions for TikTok visitors
+    subtitle.textContent = 'Follow the instructions below to open in Safari.';
+    instructions.classList.remove('hidden');
+    btn.textContent = 'Open Instructions';
+
+    // When clicked, scroll to instructions
+    btn.onclick = function() {
+      instructions.scrollIntoView({behavior:'smooth'});
+    };
+    return; // Don't initialize hold-to-join
+  }
+
+  if (isInApp) {
+    subtitle.textContent = 'Follow the instructions below';
+    instructions.classList.remove('hidden');
+    btn.textContent = 'Open Instructions';
+    btn.onclick = function() {
+      instructions.scrollIntoView({behavior:'smooth'});
+    };
+    return;
+  }
+
+  // Function to start hold
+  function startHold() {
+    btn.classList.add('holding');
+    var remaining = 2;
+    timer.textContent = remaining;
+
+    countdown = setInterval(function() {
+      remaining--;
+      if (remaining > 0) {
+        timer.textContent = remaining;
       }
-    }, 100);
+    }, 1000);
 
-    holdTimer = setTimeout(function(){
-      clearInterval(countdownInterval);
-      timerDisplay.textContent = '';
-      openBtn.classList.remove('holding');
-      showSafariPrompt();
+    holdTimer = setTimeout(function() {
+      clearInterval(countdown);
+      timer.textContent = '';
+      btn.classList.remove('holding');
+      // Show modal to open Telegram
+      modal.classList.add('show');
     }, holdDuration);
   }
 
-  function cancelHold(){
-    openBtn.classList.remove('holding');
+  function stopHold() {
+    btn.classList.remove('holding');
     clearTimeout(holdTimer);
-    clearInterval(countdownInterval);
-    timerDisplay.textContent = '';
+    clearInterval(countdown);
+    timer.textContent = '';
   }
 
-  openBtn.addEventListener('touchstart', function(e){
+  // Event listeners for hold button (touch/mouse)
+  btn.addEventListener('touchstart', function(e) {
     e.preventDefault();
     startHold();
   });
-
-  openBtn.addEventListener('touchend', function(e){
+  btn.addEventListener('touchend', function(e) {
     e.preventDefault();
-    cancelHold();
+    stopHold();
   });
-
-  openBtn.addEventListener('touchcancel', function(e){
+  btn.addEventListener('touchcancel', function(e) {
     e.preventDefault();
-    cancelHold();
+    stopHold();
   });
-
-  openBtn.addEventListener('mousedown', function(e){
+  btn.addEventListener('mousedown', function(e) {
     e.preventDefault();
     startHold();
   });
-
-  openBtn.addEventListener('mouseup', function(e){
+  btn.addEventListener('mouseup', function(e) {
     e.preventDefault();
-    cancelHold();
+    stopHold();
+  });
+  btn.addEventListener('mouseleave', stopHold);
+
+  // Modal actions
+  openBtn.addEventListener('click', function() {
+    modal.classList.remove('show');
+    timer.textContent = '✓';
+    window.location.href = telegramUrl;
   });
 
-  openBtn.addEventListener('mouseleave', function(e){
-    cancelHold();
+  cancelBtn.addEventListener('click', function() {
+    modal.classList.remove('show');
   });
 
-  // In-app browser detection
-  var ua = navigator.userAgent || navigator.vendor || "";
-  var isTikTok = /TikTok/i.test(ua);
-  var isInstagram = /Instagram/i.test(ua);
-  var isInApp = isTikTok || isInstagram || /FBAN|FBAV|Line|LinkedInApp/i.test(ua);
-  
-  if(isInApp){
-    var hint = document.getElementById('appHint');
-    openBtn.textContent = 'Open Instructions';
-    timerDisplay.textContent = '';
-    
-    if(isTikTok){
-      hint.innerHTML = "<strong>📱 From TikTok:</strong><br>1. Tap the three dots (⋯) in the top right<br>2. Select 'Open in Safari' (iOS) or 'Open in browser' (Android)<br>3. The page will automatically connect you to Telegram!";
-    } else {
-      hint.innerText = "Tap the ⋯ menu and choose 'Open in Safari' or 'Open in browser', then the page will auto-connect.";
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.classList.remove('show');
     }
-    
-    var qrImg = document.createElement('img');
-    qrImg.className = 'qr';
-    qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(webUrl);
-    var qrLabel = document.createElement('p');
-    qrLabel.className = 'hint';
-    qrLabel.textContent = 'Or scan this QR code with your camera:';
-    document.getElementById('qrWrap').appendChild(qrLabel);
-    document.getElementById('qrWrap').appendChild(qrImg);
-    
-    // Change button to just open the link
-    openBtn.onclick = function(e){
-      e.preventDefault();
-      window.open(webUrl, '_blank');
-    };
-  }
-
-  // Auto-trigger on page load (only when NOT in in-app browser)
-  window.addEventListener('load', function(){
-    // Don't auto-trigger at all - let user click the button
-    // This prevents "content blocked" errors in TikTok and other apps
   });
 })();
-</script>
-</body>
-</html>
