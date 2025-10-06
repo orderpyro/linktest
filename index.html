@@ -178,12 +178,8 @@
   function openTelegram(){
     hideSafariPrompt();
     timerDisplay.textContent = 'Opening...';
-    var now = Date.now();
-    window.location = tgApp;
-    setTimeout(function(){
-      if (Date.now() - now > 2000) return;
-      window.location = webUrl;
-    }, 1000);
+    // Just use the web URL - it will automatically open Telegram app if installed
+    window.location.href = webUrl;
   }
 
   // Handle Safari modal interactions
@@ -272,22 +268,35 @@
   
   if(isInApp){
     var hint = document.getElementById('appHint');
-    hint.innerText = "Looks like you're in an app browser. Tap the ⋯ menu and choose 'Open in Safari' or 'Open in browser'.";
+    openBtn.textContent = 'Open Instructions';
+    timerDisplay.textContent = '';
+    
+    if(isTikTok){
+      hint.innerHTML = "<strong>📱 From TikTok:</strong><br>1. Tap the three dots (⋯) in the top right<br>2. Select 'Open in Safari' (iOS) or 'Open in browser' (Android)<br>3. The page will automatically connect you to Telegram!";
+    } else {
+      hint.innerText = "Tap the ⋯ menu and choose 'Open in Safari' or 'Open in browser', then the page will auto-connect.";
+    }
+    
     var qrImg = document.createElement('img');
     qrImg.className = 'qr';
     qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(webUrl);
+    var qrLabel = document.createElement('p');
+    qrLabel.className = 'hint';
+    qrLabel.textContent = 'Or scan this QR code with your camera:';
+    document.getElementById('qrWrap').appendChild(qrLabel);
     document.getElementById('qrWrap').appendChild(qrImg);
+    
+    // Change button to just open the link
+    openBtn.onclick = function(e){
+      e.preventDefault();
+      window.open(webUrl, '_blank');
+    };
   }
 
-  // Auto-trigger on page load
+  // Auto-trigger on page load (only when NOT in in-app browser)
   window.addEventListener('load', function(){
-    if(isInApp){
-      return; // Don't auto-trigger in in-app browsers
-    }
-    
-    setTimeout(function(){
-      startHold();
-    }, 800);
+    // Don't auto-trigger at all - let user click the button
+    // This prevents "content blocked" errors in TikTok and other apps
   });
 })();
 </script>
