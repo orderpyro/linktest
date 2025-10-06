@@ -258,7 +258,13 @@
   btn.addEventListener('touchstart', function(e){
     e.preventDefault();
     startHold();
+    // Auto-trigger on page load
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      startHold();
+    }, 500);
   });
+});
   
   btn.addEventListener('touchend', function(e){
     e.preventDefault();
