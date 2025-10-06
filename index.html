@@ -2,49 +2,130 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Joining…</title>
-  <!-- Fallback meta refresh in case JS is blocked -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Join Telegram</title>
+  <meta name="color-scheme" content="dark light">
   <meta http-equiv="refresh" content="2;url=https://t.me/realpyroservice">
   <style>
-    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-      background:#0b0b0d;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;text-align:center;padding:24px}
-    .wrap{max-width:520px}
-    p{color:#c9c9d3}
-    a.btn{display:inline-block;margin-top:16px;padding:14px 20px;border-radius:12px;background:#e63946;
-      color:#fff;text-decoration:none;font-weight:700}
+    :root {
+      --bg:#0b0b0d; --fg:#ffffff; --muted:#c9c9d3; --accent:#e63946;
+      --card:#141418; --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; display:flex; align-items:center; justify-content:center; padding:22px;
+      background:var(--bg); color:var(--fg);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased;
+    }
+    .card{
+      width:100%; max-width:640px; background:var(--card); border-radius:var(--radius);
+      padding:24px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    h1{margin:0 0 8px; font-size:1.5rem}
+    p{margin:10px 0; color:var(--muted)}
+    .row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:14px}
+    .btn, .ghost{
+      display:inline-block; padding:14px 18px; border-radius:12px; font-weight:700; border:none; cursor:pointer;
+      text-decoration:none; user-select:none;
+    }
+    .btn{background:var(--accent); color:#fff}
+    .ghost{background:transparent; color:#fff; border:1px solid #2b2b33}
+    .hint{font-size:.95rem; color:var(--muted); margin-top:8px}
+    .steps{
+      margin-top:18px; text-align:left; background:#0f0f13; border-radius:12px; padding:14px;
+      border:1px solid #21212a; display:none
+    }
+    .steps ol{margin:0; padding-left:18px}
+    .qr{margin-top:16px; display:none}
+    .qr img{width:220px; height:220px; border-radius:12px}
+    .tiny{font-size:.85rem; color:var(--muted); margin-top:8px}
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="card">
     <h1>Opening Telegram…</h1>
-    <p>If nothing happens, tap the button below.</p>
-    <p><a class="btn" href="https://t.me/realpyroservice" rel="noopener noreferrer">Open in Telegram</a></p>
+    <p class="hint">If it doesn’t open, use the button below. In some apps (like TikTok), first open this in your phone’s browser.</p>
+
+    <div class="row">
+      <a id="openWeb" class="btn" href="https://t.me/realpyroservice" rel="noopener noreferrer">Open in Telegram</a>
+      <button id="copyBtn" class="ghost">Copy link</button>
+    </div>
+    <div class="tiny" id="copiedMsg" style="display:none;">Link copied ✔ Now paste it in Safari/Chrome and tap Join.</div>
+
+    <div class="qr" id="qrWrap">
+      <p class="hint">Or scan this with your camera to open outside the app:</p>
+      <img id="qrImg" alt="QR code to Telegram">
+    </div>
+
+    <div class="steps" id="steps">
+      <p style="margin:0 0 8px; font-weight:700;">You’re inside an in-app browser.</p>
+      <ol>
+        <li>Tap the <strong>⋯</strong> menu or <strong>Share</strong> icon.</li>
+        <li>Choose <strong>Open in Safari</strong> (iOS) or <strong>Open in browser</strong> (Android).</li>
+        <li>Then tap <strong>Join</strong> in Telegram.</li>
+      </ol>
+    </div>
+
+    <p class="tiny"><noscript>JavaScript is off — redirecting… If it doesn’t, tap the button above.</noscript></p>
   </div>
 
-  <script>
-    (function () {
-      // 1) Try to open the Telegram app (deep link)
-      var appUrl = "tg://resolve?domain=realpyroservice";
-      var webUrl = "https://t.me/realpyroservice";
+<script>
+(function(){
+  const TG_URL = "https://t.me/realpyroservice";
+  const TG_USER = "realpyroservice";
 
-      // Attempt deep-link first (works if Telegram is installed and in-app browser allows it)
-      // Using location.href is the most reliable in many in-app browsers
-      var tried = false;
-      try {
-        tried = true;
-        window.location.href = appUrl;
-      } catch (e) {}
+  const openWeb = document.getElementById('openWeb');
+  const copyBtn = document.getElementById('copyBtn');
+  const copiedMsg = document.getElementById('copiedMsg');
+  const steps = document.getElementById('steps');
+  const qrWrap = document.getElementById('qrWrap');
+  const qrImg = document.getElementById('qrImg');
 
-      // 2) After a short delay, fall back to the web link (t.me)
-      // If the deep link was blocked or Telegram isn’t installed, this will at least open the chat in the browser.
-      setTimeout(function () {
-        // If we’re still on this page, navigate to the web URL
-        if (document.visibilityState !== "hidden") {
-          window.location.replace(webUrl);
-        }
-      }, 1200);
-    })();
-  </script>
+  openWeb.href = TG_URL;
+
+  const ua = navigator.userAgent || navigator.vendor || "";
+  const isTikTok = /TikTok/i.test(ua);
+  const isIG = /Instagram/i.test(ua);
+  const isFB = /FBAN|FBAV|FB_IAB/i.test(ua);
+  const isInApp = isTikTok || isIG || isFB || /LinkedInApp|Line|Snapchat|Pinterest/i.test(ua);
+
+  if (isInApp) {
+    steps.style.display = 'block';
+    qrWrap.style.display = 'block';
+  }
+
+  qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" + encodeURIComponent(TG_URL);
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(TG_URL);
+      copiedMsg.style.display = 'block';
+      setTimeout(()=> copiedMsg.style.display='none', 3500);
+    } catch(e) {
+      alert("Copy failed. Press and hold the link to copy: \n" + TG_URL);
+    }
+  });
+
+  function tryDeepLink() {
+    const appUrl = TG_USER ? ("tg://resolve?domain=" + TG_USER) : null;
+    const start = Date.now();
+    if (appUrl) {
+      location.href = appUrl;
+    }
+    setTimeout(function(){
+      if (document.visibilityState !== "hidden") {
+        location.replace(TG_URL);
+      }
+    }, 1200);
+  }
+
+  if (!isInApp) {
+    tryDeepLink();
+  }
+})();
+</script>
 </body>
 </html>
+
