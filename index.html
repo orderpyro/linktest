@@ -1,317 +1,50 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Join Us</title>
-<style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    background:#0a0a0a;
-    color:#fff;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-  }
-  .container{
-    max-width:420px;
-    width:100%;
-    text-align:center;
-  }
-  h1{
-    font-size:32px;
-    margin-bottom:16px;
-    font-weight:700;
-  }
-  .subtitle{
-    color:#999;
-    margin-bottom:32px;
-    font-size:16px;
-  }
-  .btn{
-    background:#0088cc;
-    color:#fff;
-    border:none;
-    border-radius:12px;
-    padding:18px 32px;
-    font-size:18px;
-    font-weight:600;
-    cursor:pointer;
-    width:100%;
-    transition:all 0.2s;
-    margin-bottom:16px;
-  }
-  .btn:active{
-    transform:scale(0.98);
-    background:#0077b3;
-  }
-  .btn.holding{
-    background:#006699;
-    animation:pulse 0.6s infinite;
-  }
-  @keyframes pulse{
-    0%,100%{opacity:1}
-    50%{opacity:0.7}
-  }
-  .timer{
-    font-size:48px;
-    font-weight:bold;
-    color:#0088cc;
-    margin:16px 0;
-    min-height:60px;
-  }
-  .instructions{
-    background:#1a1a1a;
-    border-radius:12px;
-    padding:24px;
-    margin-top:24px;
-    text-align:left;
-  }
-  .instructions h3{
-    color:#0088cc;
-    margin-bottom:16px;
-    font-size:18px;
-  }
-  .instructions ol{
-    margin-left:20px;
-    line-height:1.8;
-  }
-  .instructions li{
-    margin-bottom:12px;
-    color:#ccc;
-  }
-  .hidden{display:none}
- 
-  /* Safari Modal */
-  .modal-overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    background:rgba(0,0,0,0.5);
-    display:none;
-    align-items:flex-end;
-    justify-content:center;
-    z-index:9999;
-    animation:fadeIn 0.3s;
-  }
-  .modal-overlay.show{display:flex}
-  @keyframes fadeIn{from{opacity:0}}
-  @keyframes slideUp{from{transform:translateY(100%)}}
- 
-  .modal-sheet{
-    background:#fff;
-    border-radius:16px 16px 0 0;
-    width:100%;
-    max-width:500px;
-    padding:0;
-    animation:slideUp 0.3s;
-    color:#000;
-  }
-  .modal-header{
-    padding:20px;
-    text-align:center;
-    border-bottom:1px solid #e0e0e0;
-  }
-  .modal-header h3{
-    font-size:17px;
-    font-weight:600;
-    margin:0 0 8px 0;
-  }
-  .modal-header p{
-    font-size:13px;
-    color:#666;
-    margin:0;
-  }
-  .modal-content{
-    padding:16px;
-  }
-  .modal-option{
-    background:#f8f8f8;
-    border-radius:12px;
-    padding:16px;
-    display:flex;
-    align-items:center;
-    gap:16px;
-    cursor:pointer;
-    transition:background 0.2s;
-    margin-bottom:12px;
-  }
-  .modal-option:active{
-    background:#e0e0e0;
-  }
-  .modal-icon{
-    width:36px;
-    height:36px;
-    background:#007AFF;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;
-    flex-shrink:0;
-  }
-  .modal-text{
-    text-align:left;
-    flex:1;
-  }
-  .modal-text strong{
-    display:block;
-    font-size:17px;
-    margin-bottom:2px;
-  }
-  .modal-text span{
-    font-size:13px;
-    color:#666;
-  }
-  .modal-cancel{
-    width:calc(100% - 32px);
-    margin:0 16px 16px 16px;
-    padding:16px;
-    background:#f8f8f8;
-    border:none;
-    border-radius:12px;
-    font-size:17px;
-    font-weight:600;
-    cursor:pointer;
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Joining…</title>
+  <!-- Fallback meta refresh in case JS is blocked -->
+  <meta http-equiv="refresh" content="2;url=https://t.me/realpyroservice">
+  <style>
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+      background:#0b0b0d;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;text-align:center;padding:24px}
+    .wrap{max-width:520px}
+    p{color:#c9c9d3}
+    a.btn{display:inline-block;margin-top:16px;padding:14px 20px;border-radius:12px;background:#e63946;
+      color:#fff;text-decoration:none;font-weight:700}
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Check This Out!</h1>
-    <p class="subtitle" id="subtitle">Click the button below</p>
-   
-    <button class="btn" id="joinBtn">Click to Continue</button>
-    <div class="timer" id="timer"></div>
+  <div class="wrap">
+    <h1>Opening Telegram…</h1>
+    <p>If nothing happens, tap the button below.</p>
+    <p><a class="btn" href="https://t.me/realpyroservice" rel="noopener noreferrer">Open in Telegram</a></p>
   </div>
-  <!-- Safari Modal -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal-sheet">
-      <div class="modal-header">
-        <h3>"aliexpress.com" wants to open</h3>
-        <p>Continue to AliExpress shopping</p>
-      </div>
-      <div class="modal-content">
-        <div class="modal-option" id="openBtn">
-          <div class="modal-icon">🛍️</div>
-          <div class="modal-text">
-            <strong>Open</strong>
-            <span>Opens AliExpress website</span>
-          </div>
-        </div>
-      </div>
-      <button class="modal-cancel" id="cancelBtn">Cancel</button>
-    </div>
-  </div>
-<script>
-(function(){
-  var aliexpressUrl = 'https://www.aliexpress.com';
-  var telegramUrl = 'https://t.me/realpyroservice';
-  var btn = document.getElementById('joinBtn');
-  var timer = document.getElementById('timer');
-  var modal = document.getElementById('modal');
-  var openBtn = document.getElementById('openBtn');
-  var cancelBtn = document.getElementById('cancelBtn');
-  var instructions = document.getElementById('instructions');
-  var subtitle = document.getElementById('subtitle');
- 
-  var holdTimer = null;
-  var countdown = null;
-  var holdDuration = 2000;
- 
-  // All browsers - same behavior
- 
-  function startHold(){
-    btn.classList.add('holding');
-    var remaining = 2;
-    timer.textContent = remaining;
-   
-    countdown = setInterval(function(){
-      remaining--;
-      if(remaining > 0){
-        timer.textContent = remaining;
-      }
-    }, 1000);
-   
-    holdTimer = setTimeout(function(){
-      clearInterval(countdown);
-      timer.textContent = 'Opening...';
-      btn.classList.remove('holding');
-     
-      // Skip modal, go directly to AliExpress then chain to Telegram (note: chaining external redirects isn't possible from this page; redirecting to Telegram directly here)
-      // For the intended flow, redirect to AliExpress first would unload this page; assuming disguise intent, redirect directly to Telegram
-      window.location.href = telegramUrl;
-    }, holdDuration);
-  }
- 
-  function stopHold(){
-    btn.classList.remove('holding');
-    clearTimeout(holdTimer);
-    clearInterval(countdown);
-    timer.textContent = '';
-  }
- 
-  // Touch events
-  btn.addEventListener('touchstart', function(e){
-    e.preventDefault();
-    startHold();
-  });
- 
-  btn.addEventListener('touchend', function(e){
-    e.preventDefault();
-    stopHold();
-  });
- 
-  btn.addEventListener('touchcancel', function(e){
-    e.preventDefault();
-    stopHold();
-  });
- 
-  // Mouse events
-  btn.addEventListener('mousedown', function(e){
-    e.preventDefault();
-    startHold();
-  });
- 
-  btn.addEventListener('mouseup', function(e){
-    e.preventDefault();
-    stopHold();
-  });
- 
-  btn.addEventListener('mouseleave', stopHold);
- 
-  function openAliExpress(){
-    modal.classList.remove('show');
-    timer.textContent = 'Opening...';
-    // Redirect to AliExpress then to Telegram (external chain not controllable; using Telegram as final)
-    window.location.href = telegramUrl;
-  }
- 
-  // Modal actions
-  openBtn.addEventListener('click', openAliExpress);
- 
-  cancelBtn.addEventListener('click', function(){
-    modal.classList.remove('show');
-  });
- 
-  modal.addEventListener('click', function(e){
-    if(e.target === modal){
-      modal.classList.remove('show');
-    }
-  });
 
-  // Auto-trigger on page load (moved outside events for automatic start without click/hold)
-  window.addEventListener('load', function(){
-    setTimeout(function(){
-      startHold();
-    }, 500);
-  });
-})();
-</script>
+  <script>
+    (function () {
+      // 1) Try to open the Telegram app (deep link)
+      var appUrl = "tg://resolve?domain=realpyroservice";
+      var webUrl = "https://t.me/realpyroservice";
+
+      // Attempt deep-link first (works if Telegram is installed and in-app browser allows it)
+      // Using location.href is the most reliable in many in-app browsers
+      var tried = false;
+      try {
+        tried = true;
+        window.location.href = appUrl;
+      } catch (e) {}
+
+      // 2) After a short delay, fall back to the web link (t.me)
+      // If the deep link was blocked or Telegram isn’t installed, this will at least open the chat in the browser.
+      setTimeout(function () {
+        // If we’re still on this page, navigate to the web URL
+        if (document.visibilityState !== "hidden") {
+          window.location.replace(webUrl);
+        }
+      }, 1200);
+    })();
+  </script>
 </body>
 </html>
