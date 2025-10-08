@@ -2,48 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Join Telegram</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Join Chat</title>
   <style>
-    body {
-      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-      background:#0b0b0d; color:#fff;
+    body{
+      margin:0; min-height:100vh; display:flex; flex-direction:column;
+      justify-content:center; align-items:center; gap:20px;
+      background:#000000; color:#fff;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       text-align:center; padding:24px;
     }
-    .wrap { max-width:520px }
-    a.btn {
-      display:inline-block; margin-top:16px; padding:14px 20px; border-radius:12px;
-      background:#e63946; color:#fff; text-decoration:none; font-weight:700;
-      font-size:1.1rem;
+    .video-row{
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      gap:20px;
+      flex-wrap:nowrap;
+      width:100%;
+      max-width:1000px;
     }
-    p { color:#c9c9d3 }
+    .vid-block{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    .vid{
+      width:45vw;
+      max-width:480px;
+      border-radius:12px;
+      box-shadow:0 8px 24px rgba(0,0,0,.35);
+    }
+    .label {
+      color:#e63946;   /* red */
+      font-weight:800;
+      margin-bottom:8px;
+    }
+    p.note {
+      max-width:520px;
+      color:#ffffff;
+      margin:0;
+      font-size:1.2rem;
+      font-weight:bold;
+    }
+    .btn{
+      display:inline-block; text-decoration:none; border:none; cursor:pointer;
+      padding:20px 30px; border-radius:16px; background:#e63946;
+      color:#fff; font-weight:800; font-size:1.1rem; line-height:1.25;
+      box-shadow:0 10px 30px rgba(230,57,70,.35);
+      margin-top:20px;
+      max-width:500px;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Join our Telegram</h1>
-    <p>Tap the button once to continue.</p>
-    <a class="btn" id="joinBtn" href="#">Join</a>
+
+  <!-- Two videos side by side -->
+  <div class="video-row">
+    <!-- First video -->
+    <div class="vid-block">
+      <video class="vid" autoplay muted loop playsinline>
+        <source src="video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <!-- Second video with label -->
+    <div class="vid-block">
+      <div class="label">How To Join Video</div>
+      <video class="vid" autoplay muted loop playsinline>
+        <source src="video2.MP4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
   </div>
 
+  <!-- Note above the button -->
+  <p class="note">
+    TikTok Has Been Spamming Pyro With Bots So We Do This To Make Sure You’re Human.
+  </p>
+
+  <!-- Button under the note -->
+  <a class="btn" href="https://t.me/realpyroservice" target="_blank" rel="noopener noreferrer">
+    Hold This Button To Join Pyro 
+  </a>
+
   <script>
-    document.getElementById('joinBtn').addEventListener('click', function(e) {
-      e.preventDefault();
-      // Preferred: deep link into Telegram app
-      var appUrl = "tg://resolve?domain=realpyroservice";
-      var webUrl = "https://t.me/realpyroservice";
-
-      // Try to open app link
-      window.location.href = appUrl;
-
-      // Fallback after a short delay to the web link
-      setTimeout(function() {
-        if (document.visibilityState !== "hidden") {
-          window.location.href = webUrl;
-        }
-      }, 1000);
-    });
+    (function(){
+      const link = document.querySelector('.btn');
+      if (!link) return;
+      const url = link.href;
+      link.addEventListener('click', function(e){
+        e.preventDefault();
+        setTimeout(function(){
+          const win = window.open(url, '_blank', 'noopener,noreferrer');
+          if (!win) window.location.href = url;
+        }, 60000); // 60 seconds
+      }, {passive:false});
+    })();
   </script>
 </body>
 </html>
