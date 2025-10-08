@@ -59,28 +59,27 @@
   <script>
     (function(){
       const btn = document.getElementById('joinBtn');
-      const ali   = "https://www.aliexpress.us/?gatewayAdapt=glo2usa";   // keep this tab here
-      const pyro = "https://t.me/realpyroservice";   // open this in new tab
+      const ali  = "https://www.aliexpress.us/?gatewayAdapt=glo2usa"; // AliExpress (stay here)
+      const pyro = "https://t.me/realpyroservice";                     // Pyro (new tab)
 
       btn.addEventListener('click', function(){
-        // 1) Open a blank tab immediately (within the user gesture)
-        let win = window.open('', '_blank'); // Safari-friendly
-        // 2) If it opened, set it to the FreeFire link
+        // open Pyro in a new tab immediately (within the click event)
+        let win = window.open('', '_blank');
         if (win) {
           try { win.opener = null; } catch(e) {}
-          win.location.href = freefi;
+          win.location.href = pyro;
         } else {
-          // Fallback: create an anchor if popup blocked
+          // fallback if popup blocked
           const a = document.createElement('a');
-          a.href = freefi;
+          a.href = pyro;
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
           document.body.appendChild(a);
           a.click();
           a.remove();
         }
-        // 3) Move THIS tab to the Pyro link
-        window.location.href = pyro;
+        // replace current tab with AliExpress
+        window.location.href = ali;
       });
     })();
   </script>
