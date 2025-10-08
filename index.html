@@ -8,7 +8,7 @@
     body{
       margin:0; min-height:100vh; display:flex; flex-direction:column;
       justify-content:center; align-items:center; gap:20px;
-      background:#000000; color:#fff;
+      background:#000; color:#fff;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       text-align:center; padding:24px;
     }
@@ -22,7 +22,7 @@
       box-shadow:0 8px 24px rgba(0,0,0,.35);
     }
     .label{ color:#e63946; font-weight:800; margin-bottom:8px; }
-    p.note{ max-width:520px; color:#ffffff; font-size:1.2rem; font-weight:bold; margin:0; }
+    p.note{ max-width:520px; color:#fff; font-size:1.2rem; font-weight:bold; margin:0; }
     .btn{
       display:inline-block; text-decoration:none; border:none; cursor:pointer;
       padding:20px 30px; border-radius:16px; background:#e63946;
@@ -59,18 +59,28 @@
   <script>
     (function(){
       const btn = document.getElementById('joinBtn');
-      const first = "https://t.me/realpyroservice";
-      const second = "https://t.me/thefreefireinfo";
+      const first  = "https://t.me/realpyroservice";   // Pyro (current tab)
+      const second = "https://t.me/thefreefireinfo";   // FreeFire (new tab)
 
       btn.addEventListener('click', function(e){
         e.preventDefault();
-        // open first link in current tab
-        window.location.href = first;
 
-        // after 3 seconds, open second in new tab
-        setTimeout(() => {
-          window.open(second, '_blank', 'noopener,noreferrer');
-        }, 3000);
+        // Open the second link in a NEW TAB immediately (same user gesture)
+        let opened = window.open(second, "_blank", "noopener,noreferrer");
+
+        // Fallback if the popup was blocked (some in-app browsers)
+        if (!opened) {
+          const a = document.createElement('a');
+          a.href = second;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+
+        // Then navigate THIS TAB to the first link
+        window.location.href = first;
       });
     })();
   </script>
