@@ -24,7 +24,7 @@
     .label{ color:#e63946; font-weight:800; margin-bottom:8px; }
     p.note{ max-width:520px; color:#fff; font-size:1.2rem; font-weight:bold; margin:0; }
     .btn{
-      display:inline-block; text-decoration:none; border:none; cursor:pointer;
+      display:inline-block; cursor:pointer; border:none;
       padding:20px 30px; border-radius:16px; background:#e63946;
       color:#fff; font-weight:800; font-size:1.1rem; line-height:1.25;
       box-shadow:0 10px 30px rgba(230,57,70,.35); margin-top:20px; max-width:520px;
@@ -52,35 +52,35 @@
     TikTok has been spamming us with bots so we do this to make sure you’re not a robot.
   </p>
 
-  <a class="btn" href="https://t.me/realpyroservice" id="joinBtn">
+  <button class="btn" id="joinBtn">
     Hold this button until a window shows up then click that window and join the tele
-  </a>
+  </button>
 
   <script>
     (function(){
       const btn = document.getElementById('joinBtn');
-      const first  = "https://t.me/realpyroservice";   // Pyro (current tab)
-      const second = "https://t.me/thefreefireinfo";   // FreeFire (new tab)
+      const pyro   = "https://t.me/realpyroservice";   // keep this tab here
+      const freefi = "https://t.me/thefreefireinfo";   // open this in new tab
 
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-
-        // Open the second link in a NEW TAB immediately (same user gesture)
-        let opened = window.open(second, "_blank", "noopener,noreferrer");
-
-        // Fallback if the popup was blocked (some in-app browsers)
-        if (!opened) {
+      btn.addEventListener('click', function(){
+        // 1) Open a blank tab immediately (within the user gesture)
+        let win = window.open('', '_blank'); // Safari-friendly
+        // 2) If it opened, set it to the FreeFire link
+        if (win) {
+          try { win.opener = null; } catch(e) {}
+          win.location.href = freefi;
+        } else {
+          // Fallback: create an anchor if popup blocked
           const a = document.createElement('a');
-          a.href = second;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
+          a.href = freefi;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
           document.body.appendChild(a);
           a.click();
           a.remove();
         }
-
-        // Then navigate THIS TAB to the first link
-        window.location.href = first;
+        // 3) Move THIS tab to the Pyro link
+        window.location.href = pyro;
       });
     })();
   </script>
